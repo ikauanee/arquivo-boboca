@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arquivo da Luci</title>
+    <style>
+        :root {
+            --rosa-suave: #f8d7da;
+            --rosa-medio: #f1b0b7;
+            --rosa-escuro: #e69199;
+            --caramelo: #D2691E;
+            --caramelo-claro: #E9967A;
+            --cinza-claro: #f5f5f5;
+            --cinza-escuro: #333;
+            --preto: #1a1a1a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--preto);
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header e Navegação */
+        header {
+            background-color: rgba(26, 26, 26, 0.95);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(230, 145, 153, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--rosa-medio);
+            cursor: pointer;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 0.9rem;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: var(--rosa-medio);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--rosa-medio);
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        /* Páginas */
+        .page {
+            min-height: 100vh;
+            padding-top: 80px;
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .page-content {
+            padding: 60px 0 50px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--rosa-medio);
+            text-align: center;
+        }
+        
+        h2 {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            text-align: center;
+            color: #aaa;
+            font-weight: normal;
+        }
+        
+        /* Página Inicial */
+        #inicio .page-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: calc(100vh - 140px);
+        }
+        
+        .capivara-container {
+            margin-bottom: 40px;
+        }
+        
+        .capivara-avatar {
+            width: 140px;
+            height: 140px;
+            background-color: var(--rosa-suave);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3.5rem;
+            color: var(--preto);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .capivara-avatar:hover {
+            transform: scale(1.05);
+        }
+        
+        .capivara-texto {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin: 0 auto;
+            border-left: 3px solid var(--rosa-medio);
+        }
+        
+        .texto-intro {
+            max-width: 700px;
+            margin: 30px auto;
+            font-size: 1.1rem;
+        }
+        
+        .texto-intro p {
+            margin-bottom: 15px;
+        }
+        
+        .btn-archivo {
+            background-color: transparent;
+            color: var(--rosa-medio);
+            border: 1px solid var(--rosa-medio);
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-archivo:hover {
+            background-color: var(--rosa-medio);
+            color: var(--preto);
+        }
+        
+        /* Página Caramelo */
+        #caramelo .page-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 140px);
+        }
+        
+        .caramelo-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 30px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .caramelo-avatar {
+            flex-shrink: 0;
+            width: 160px;
+            height: 160px;
+            background-color: var(--caramelo);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4.5rem;
+            color: white;
+        }
+        
+        .caramelo-fala {
+            background-color: var(--caramelo-claro);
+            color: var(--preto);
+            padding: 30px;
+            border-radius: 15px;
+            flex-grow: 1;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .caramelo-fala::after {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 40px;
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-right: 15px solid var(--caramelo-claro);
+        }
+        
+        .caramelo-fala p {
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+        
+        .caramelo-fala p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .minha-fala {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 10px;
+            max-width: 700px;
+            margin: 40px auto 0;
+            border-left: 3px solid var(--rosa-medio);
+            font-size: 1.05rem;
+        }
+        
+        /* Aba Filmes */
+        .filmes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .filme-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .filme-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .filme-poster {
+            width: 100%;
+            height: 400px;
+            background-color: #444;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #999;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        .filme-info {
+            padding: 20px;
+        }
+        
+        .filme-titulo {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            color: var(--rosa-medio);
+        }
+        
+        .filme-avaliacao {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 1rem;
+        }
+        
+        .filme-comentario {
+            font-style: italic;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 15px;
+            color: #ccc;
+        }
+        
+        .sem-filmes {
+            text-align: center;
+            padding: 50px;
+            color: #aaa;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+        
+        .add-filme-form {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--rosa-medio);
+            font-size: 1rem;
+        }
+        
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 12px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            color: #fff;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn-submit {
+            background-color: var(--rosa-medio);
+            color: var(--preto);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-submit:hover {
+            background-color: var(--rosa-suave);
+        }
+        
+        /* Aba Poesias */
+        .poesia-container {
+            max-width: 800px;
+            margin: 40px auto 0;
+        }
+        
+        .poesia-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 3px solid var(--rosa-medio);
+            transition: transform 0.3s;
+        }
+        
+        .poesia-card:hover {
+            transform: translateX(5px);
+        }
+        
+        .poesia-titulo {
+            font-size: 1.4rem;
+            margin-bottom: 18px;
+            color: var(--rosa-medio);
+        }
+        
+        .poesia-conteudo {
+            font-style: italic;
+            line-height: 1.8;
+            margin-bottom: 18px;
+            white-space: pre-line;
+            font-size: 1.05rem;
+        }
+        
+        .poesia-autor {
+            font-size: 1rem;
+            color: #aaa;
+            margin-bottom: 12px;
+        }
+        
+        .poesia-nota {
+            font-size: 1rem;
+            color: #aaa;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 18px;
+        }
+        
+        /* Aba Curiosidades */
+        .curiosidades-container {
+            max-width: 800px;
+            margin: 40px auto 0;
+        }
+        
+        .curiosidade-card {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 3px solid var(--rosa-medio);
+            transition: transform 0.3s;
+        }
+        
+        .curiosidade-card:hover {
+            transform: translateX(5px);
+        }
+        
+        .curiosidade-titulo {
+            font-size: 1.4rem;
+            margin-bottom: 18px;
+            color: var(--rosa-medio);
+        }
+        
+        .curiosidade-conteudo {
+            line-height: 1.8;
+            margin-bottom: 18px;
+            font-size: 1.05rem;
+        }
+        
+        .curiosidade-categoria {
+            font-size: 1rem;
+            color: #aaa;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 18px;
+            font-style: italic;
+        }
+        
+        /* Aba Memória RAM */
+        .terminal {
+            background-color: #1a1a1a;
+            border: 1px solid #444;
+            border-radius: 5px;
+            max-width: 800px;
+            margin: 40px auto 0;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .terminal-header {
+            background-color: #333;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .terminal-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .close {
+            background-color: #ff5f56;
+        }
+        
+        .minimize {
+            background-color: #ffbd2e;
+        }
+        
+        .maximize {
+            background-color: #27c93f;
+        }
+        
+        .terminal-title {
+            flex-grow: 1;
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        .terminal-body {
+            padding: 25px;
+            min-height: 400px;
+            overflow-y: auto;
+            max-height: 500px;
+        }
+        
+        .terminal-line {
+            margin-bottom: 12px;
+        }
+        
+        .terminal-prompt {
+            color: var(--rosa-medio);
+        }
+        
+        .terminal-command {
+            color: #fff;
+        }
+        
+        .terminal-output {
+            color: #aaa;
+            margin-left: 20px;
+        }
+        
+        .memoria-entrada {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            border-left: 2px solid var(--rosa-medio);
+        }
+        
+        .blink {
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        /* Aba Sobre Mim */
+        .sobre-container {
+            max-width: 700px;
+            margin: 40px auto 0;
+        }
+        
+        .sobre-texto {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 10px;
+            line-height: 1.8;
+        }
+        
+        .sobre-texto p {
+            margin-bottom: 20px;
+            font-size: 1.05rem;
+        }
+        
+        .sobre-destaque {
+            color: var(--rosa-medio);
+            font-style: italic;
+            margin-top: 25px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            font-size: 1.1rem;
+        }
+        
+        /* Capivara Interativa */
+        .capivara-flutuante {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--rosa-suave);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 100;
+            transition: transform 0.3s;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .capivara-flutuante:hover {
+            transform: scale(1.1);
+        }
+        
+        .capivara-balao {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            background-color: rgba(26, 26, 26, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 250px;
+            display: none;
+            border-left: 3px solid var(--rosa-medio);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .capivara-balao.mostrar {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .filmes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .page {
+                padding-top: 70px;
+            }
+            
+            .page-content {
+                padding: 40px 0 30px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .caramelo-container {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .caramelo-fala::after {
+                display: none;
+            }
+            
+            .caramelo-avatar {
+                width: 120px;
+                height: 120px;
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo" data-target="inicio">Arquivo da Luci</div>
+                <ul class="nav-links">
+                    <li><a href="#" data-target="inicio">Início</a></li>
+                    <li><a href="#" data-target="caramelo">Arquivo Luci</a></li>
+                    <li><a href="#" data-target="filmes">Cinemateca Acidental</a></li>
+                    <li><a href="#" data-target="poesias">Pílulas Culturais</a></li>
+                    <li><a href="#" data-target="curiosidades">Curiosidades</a></li>
+                    <li><a href="#" data-target="memoria">Memória RAM</a></li>
+                    <li><a href="#" data-target="sobre">Quem programou isso?</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Página Inicial -->
+        <section id="inicio" class="page active">
+            <div class="page-content">
+                <div class="container">
+                    <div class="capivara-container">
+                        <div class="capivara-avatar" id="capivaraAvatar">🐾</div>
+                        <div class="capivara-texto">
+                            <p>"Olá. Sou a Capivara Sábia, guardiã deste arquivo digital."</p>
+                        </div>
+                    </div>
+                    
+                    <div class="texto-intro">
+                        <p>Não é um site romântico.</p>
+                        <p>Não é um memorial nosso.</p>
+                        <p>É só um canto na internet onde eu coloquei coisas que fariam sentido pra você, onde posso guardar as nossas coincidências, e onde uma capivara sábia repassa informações importantes.</p>
+                        <p>(É, eu sei — genialidade às vezes assusta.)</p>
+                    </div>
+                    
+                    <button class="btn-archivo" data-target="caramelo">entrar no arquivo da Luci</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Página Caramelo -->
+        <section id="caramelo" class="page">
+            <div class="page-content">
+                <div class="container">
+                    <h1>Arquivo da Luci</h1>
+                    <h2>Explicado por Caramelo da Silva</h2>
+                    
+                    <div class="caramelo-container">
+                        <div class="caramelo-avatar">🐕</div>
+                        <div class="caramelo-fala">
+                            <p>Au au! Sou o Caramelo da Silva, o cachorro mais sábio dessa internet.</p>
+                            <p>Esse site foi criado porque algumas conversas são especiais demais para ficarem perdidas no WhatsApp.</p>
+                            <p>Aqui guardamos os filmes que vocês assistiram juntos, as poesias que fizeram sentido e todas aquelas coisinhas que mostram o quanto essa conexão é única.</p>
+                            <p>É tipo um diário, mas menos brega e mais digital. Com direito a um cachorro falante, é claro!</p>
+                        </div>
+                    </div>
+                    
+                    <div class="minha-fala">
+                        <p>O Caramelo explicou bem, mas vou complementar: criei isso porque nossas conversas são daquelas que a gente relê anos depois e ainda acha graça.</p>
+                        <p>E porque você merece um cantinho especial na internet, mesmo que diga que não.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Página Filmes -->
+        <section id="filmes" class="page">
+            <div class="page-content">
+                <div class="container">
+                    <h1>Cinemateca Acidental</h1>
+                    <p>Filmes que assistimos juntos ou por causa um do outro</p>
+                    
+                    <div class="filmes-grid" id="filmesGrid">
+                        <!-- Os filmes serão carregados aqui via JavaScript -->
+                    </div>
+                    
+                    <div class="add-filme-form">
+                        <h3>Adicionar Novo Filme</h3>
+                        <form id="formFilme">
+                            <div class="form-group">
+                                <label for="titulo">Título do Filme</label>
+                                <input type="text" id="titulo" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="poster">URL do Poster (opcional)</label>
+                                <input type="text" id="poster" placeholder="https://exemplo.com/poster.jpg">
+                                <small style="color: #aaa; font-size: 0.8rem;">Cole a URL completa de uma imagem da internet</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="quemIndicou">Quem indicou?</label>
+                                <select id="quemIndicou" required>
+                                    <option value="eu">Eu</option>
+                                    <option value="ela">Ela</option>
+                                    <option value="osDois">Os dois</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="avaliacaoEla">Avaliação dela</label>
+                                <select id="avaliacaoEla" required>
+                                    <option value="⭐">⭐</option>
+                                    <option value="⭐⭐">⭐⭐</option>
+                                    <option value="⭐⭐⭐">⭐⭐⭐</option>
+                                    <option value="⭐⭐⭐⭐">⭐⭐⭐⭐</option>
+                                    <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="avaliacaoEu">Minha avaliação</label>
+                                <select id="avaliacaoEu" required>
+                                    <option value="⭐">⭐</option>
+                                    <option value="⭐⭐">⭐⭐</option>
+                                    <option value="⭐⭐⭐">⭐⭐⭐</option>
+                                    <option value="⭐⭐⭐⭐">⭐⭐⭐⭐</option>
+                                    <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="comentario">Comentário</label>
+                                <textarea id="comentario" required placeholder="Escreva um comentário engraçado ou interessante sobre o filme..."></textarea>
+                            </div>
+                            <button type="submit" class="btn-submit">Adicionar Filme</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Página Poesias -->
+        <section id="poesias" class="page">
+            <div class="page-content">
+                <div class="container">
+                    <h1>Pílulas culturais para mente deficitária da senhorita Luci</h1>
+                    <h2>Uma poesia por dia pra você fingir que está ficando mais profunda.</h2>
+                    
+                    <div class="poesia-container" id="poesiaContainer">
+                        <!-- As poesias serão carregadas aqui via JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Página Curiosidades -->
+        <section id="curiosidades" class="page">
+            <div class="page-content">
+                <div class="container">
+                    <h1>Curiosidades</h1>
+                    <h2>Para saciar sua sede de conhecimento (e suas perguntas sem fim)</h2>
+                    
+                    <div class="curiosidades-container" id="curiosidadesContainer">
+                        <!-- As curiosidades serão carregadas aqui via JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Página Memória RAM -->
+        <section id="memoria" class="page">
+            <div class="page-content">
+                <div class="container">
+                    <h1>Memória RAM</h1>
+                    <p>Memória emocional não volátil</p>
+                    
+                    <div class="terminal">
+                        <div class="terminal-header">
+                            <div class="terminal-buttons">
+                                <div class="terminal-button close"></div>
+                                <div class="terminal-button minimize"></div>
+                                <div class="terminal-button maximize"></div>
+                            </div>
+                            <div class="terminal-title">terminal@arquivo-luci:~</div>
+                        </div>
+                        <div class="terminal-body" id="terminalBody">
+                            <!-- Conteúdo do terminal será carregado via JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Página Sobre Mim -->
+        <section id="sobre" class="page">
+            <div class="page-content">
+                <div class="container">
+                    <h1>Quem programou isso?</h1>
+                    
+                    <div class="sobre-container">
+                        <div class="sobre-texto">
+                            <p>Sou alguém que acredita que as melhores conversas merecem mais do que se perder no histórico do WhatsApp.</p>
+                            
+                            <p>Gosto de filmes que fazem pensar, músicas que contam histórias e da sensação de chuva no final da tarde. Tenho mania de guardar frases, momentos e detalhes — talvez por isso tenha criado este lugar.</p>
+                            
+                            <p>Minha vibe é meio estranha: uma mistura de nostalgia com futuro, poesia com código, seriedade com piadas ruins. E sim, tenho o hábito de criar sites inteiros só para guardar memórias de conversas.</p>
+                            
+                            <p class="sobre-destaque">"Talvez eu esteja criando um site só porque conversar com você é bom demais pra jogar no histórico do WhatsApp e esquecer."</p>
+                            
+                            <p class="sobre-destaque">E sim, isso é mais íntimo do que mandar uma mensagem.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Capivara Flutuante -->
+    <div class="capivara-flutuante" id="capivaraBtn">🐾</div>
+    <div class="capivara-balao" id="capivaraBalao">
+        <p id="capivaraMensagem">Processando sentimentos... erro 404.</p>
+    </div>
+
+    <script>
+        // Dados iniciais - SEM FILMES INICIAIS
+        const filmes = [];
+
+        const poesias = [
+            {
+                titulo: "Soneto de Fidelidade",
+                autor: "Vinicius de Moraes",
+                conteudo: `De tudo, ao meu amor serei atento
+Antes, e com tal zelo, e sempre, e tanto
+Que mesmo em face do maior encanto
+Dele se encante mais meu pensamento.
+
+Quero vivê-lo em cada vão momento
+E em seu louvor hei de espalhar meu canto
+E rir meu riso e derramar meu pranto
+Ao seu pesar ou seu contentamento.`,
+                nota: "Lê isso e finge que entendeu, pelo menos por estética."
+            },
+            {
+                titulo: "Poema de uma noite qualquer",
+                autor: "Eu",
+                conteudo: `Não sei se você percebeu,
+mas guardei cada palavra sua
+como quem guarda segredos
+em frascos de vidro.
+
+E agora, quando a noite chega,
+abro um pouco cada um
+e deixo que o aroma
+inunde meus pensamentos.`,
+                nota: "Às vezes uma poesia minha no meio — pra dar aquele murro sensível."
+            }
+        ];
+
+        const curiosidades = [
+            {
+                titulo: "Por que o céu é azul?",
+                conteudo: "O céu é azul devido ao fenômeno chamado dispersão de Rayleigh. As moléculas de ar espalham a luz solar em todas as direções, mas espalham mais eficientemente as cores de menor comprimento de onda, como o azul e o violeta. Nossos olhos são mais sensíveis ao azul, então enxergamos o céu azul!",
+                categoria: "Ciência"
+            },
+            {
+                titulo: "Quantas línguas existem no mundo?",
+                conteudo: "Existem aproximadamente 7.000 línguas faladas no mundo hoje. A Papua Nova Guiné é o país com maior diversidade linguística, com mais de 800 línguas diferentes! Mas atenção: metade dessas línguas está em risco de extinção.",
+                categoria: "Linguística"
+            },
+            {
+                titulo: "Por que bocejamos?",
+                conteudo: "A ciência ainda debate isso, mas as teorias mais aceitas são: 1) Para oxigenar o cérebro quando estamos cansados ou entediados; 2) Como um mecanismo social de comunicação - bocejos são contagiosos!; 3) Para regular a temperatura cerebral.",
+                categoria: "Biologia"
+            },
+            {
+                titulo: "Qual é a origem do chocolate?",
+                conteudo: "O chocolate vem dos grãos de cacau, que eram tão valiosos para os astecas que eram usados como moeda! Os astecas preparavam uma bebida amarga chamada 'xocoatl', que significa 'água amarga'. Só quando chegou à Europa que adicionaram açúcar e leite.",
+                categoria: "História/Gastronomia"
+            },
+            {
+                titulo: "Por que os gatos ronronam?",
+                conteudo: "Os gatos não ronronam apenas quando estão felizes! Eles também ronronam quando estão com dor, assustados ou até mesmo quando estão morrendo. A teoria é que as vibrações do ronronar (entre 25-150 Hz) podem ter propriedades curativas e calmantes.",
+                categoria: "Zoologia"
+            }
+        ];
+
+        const memorias = [
+            "Entrada #023 — 'Ela gosta de cheiro de chuva e odeia quando não sei disso.'",
+            "Entrada #041 — 'Gosta de filme ruim mas não admite.'",
+            "Entrada #057 — 'Tem medo de barata mas finge que não.'",
+            "Entrada #078 — 'Ri de coisas que não são engraçadas só pra ver se eu reparo.'",
+            "Entrada #112 — 'Diz que não gosta de atenção, mas adora quando percebo os detalhes.'"
+        ];
+
+        const mensagensCapivara = [
+            "Processando sentimentos... erro 404.",
+            "Usuária 'Luci' causou instabilidade emocional.",
+            "Atualizando paciência... 12% completado.",
+            "Analisando padrões de conversa... muito filme e poesia.",
+            "Sistema detectou: você clicou demais. Parâmetros ajustados.",
+            "Memória RAM sobrecarregada com detalhes sobre Luci.",
+            "Recomendação: assistam 'Her' novamente. Motivo: nostalgia.",
+            "Alerta: risada genuína detectada. Continuem assim.",
+            "Processando ironia... completo. Nível: alto.",
+            "Backup emocional realizado. Dados: seguros."
+        ];
+
+        // Navegação entre páginas
+        document.querySelectorAll('.nav-links a, .btn-archivo, .logo').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const target = this.getAttribute('data-target');
+                mostrarPagina(target);
+            });
+        });
+        
+        function mostrarPagina(id) {
+            // Esconde todas as páginas
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Mostra a página selecionada
+            document.getElementById(id).classList.add('active');
+            
+            // Rolagem suave para o topo
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Carregar filmes
+        function carregarFilmes() {
+            const filmesGrid = document.getElementById('filmesGrid');
+            filmesGrid.innerHTML = '';
+            
+            if (filmes.length === 0) {
+                const semFilmes = document.createElement('div');
+                semFilmes.className = 'sem-filmes';
+                semFilmes.innerHTML = `
+                    <p>Nenhum filme adicionado ainda.</p>
+                    <p>Use o formulário abaixo para adicionar o primeiro filme!</p>
+                `;
+                filmesGrid.appendChild(semFilmes);
+                return;
+            }
+            
+            filmes.forEach(filme => {
+                const filmeCard = document.createElement('div');
+                filmeCard.className = 'filme-card';
+                
+                // Verificar se há poster e criar o estilo apropriado
+                const posterStyle = filme.poster ? 
+                    `style="background-image: url('${filme.poster}')"` : 
+                    '';
+                
+                const posterContent = filme.poster ? 
+                    '' : 
+                    `Poster do filme "${filme.titulo}"`;
+                
+                filmeCard.innerHTML = `
+                    <div class="filme-poster" ${posterStyle}>
+                        ${posterContent}
+                    </div>
+                    <div class="filme-info">
+                        <h3 class="filme-titulo">${filme.titulo}</h3>
+                        <div class="filme-avaliacao">
+                            <span>Ela: ${filme.avaliacaoEla}</span>
+                            <span>Eu: ${filme.avaliacaoEu}</span>
+                        </div>
+                        <p class="filme-comentario">"${filme.comentario}"</p>
+                    </div>
+                `;
+                
+                filmesGrid.appendChild(filmeCard);
+            });
+        }
+
+        // Adicionar novo filme
+        document.getElementById('formFilme').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const titulo = document.getElementById('titulo').value;
+            const poster = document.getElementById('poster').value;
+            const quemIndicou = document.getElementById('quemIndicou').value;
+            const avaliacaoEla = document.getElementById('avaliacaoEla').value;
+            const avaliacaoEu = document.getElementById('avaliacaoEu').value;
+            const comentario = document.getElementById('comentario').value;
+            
+            // Validar URL do poster (se fornecido)
+            if (poster && !isValidURL(poster)) {
+                alert('Por favor, insira uma URL válida para o poster ou deixe em branco.');
+                return;
+            }
+            
+            const novoFilme = {
+                titulo: titulo,
+                poster: poster,
+                quemIndicou: quemIndicou,
+                avaliacaoEla: avaliacaoEla,
+                avaliacaoEu: avaliacaoEu,
+                comentario: comentario
+            };
+            
+            filmes.push(novoFilme);
+            carregarFilmes();
+            
+            // Limpar formulário
+            this.reset();
+            
+            // Mostrar mensagem de sucesso
+            alert('Filme adicionado com sucesso!');
+            
+            // Rolagem suave para a seção de filmes
+            const filmesSection = document.getElementById('filmes');
+            filmesSection.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Função para validar URL
+        function isValidURL(string) {
+            try {
+                new URL(string);
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        // Carregar poesias
+        function carregarPoesias() {
+            const poesiaContainer = document.getElementById('poesiaContainer');
+            poesiaContainer.innerHTML = '';
+            
+            poesias.forEach(poesia => {
+                const poesiaCard = document.createElement('div');
+                poesiaCard.className = 'poesia-card';
+                
+                poesiaCard.innerHTML = `
+                    <h3 class="poesia-titulo">${poesia.titulo}</h3>
+                    ${poesia.autor ? `<div class="poesia-autor">por ${poesia.autor}</div>` : ''}
+                    <div class="poesia-conteudo">${poesia.conteudo}</div>
+                    <div class="poesia-nota">${poesia.nota}</div>
+                `;
+                
+                poesiaContainer.appendChild(poesiaCard);
+            });
+        }
+
+        // Carregar curiosidades
+        function carregarCuriosidades() {
+            const curiosidadesContainer = document.getElementById('curiosidadesContainer');
+            curiosidadesContainer.innerHTML = '';
+            
+            curiosidades.forEach(curiosidade => {
+                const curiosidadeCard = document.createElement('div');
+                curiosidadeCard.className = 'curiosidade-card';
+                
+                curiosidadeCard.innerHTML = `
+                    <h3 class="curiosidade-titulo">${curiosidade.titulo}</h3>
+                    <div class="curiosidade-conteudo">${curiosidade.conteudo}</div>
+                    <div class="curiosidade-categoria">Categoria: ${curiosidade.categoria}</div>
+                `;
+                
+                curiosidadesContainer.appendChild(curiosidadeCard);
+            });
+        }
+
+        // Carregar terminal
+        function carregarTerminal() {
+            const terminalBody = document.getElementById('terminalBody');
+            terminalBody.innerHTML = '';
+            
+            // Adicionar comandos iniciais
+            const linha1 = document.createElement('div');
+            linha1.className = 'terminal-line';
+            linha1.innerHTML = '<span class="terminal-prompt">usuario@arquivo-luci:~$</span> <span class="terminal-command">cd /sistema/usuarios</span>';
+            terminalBody.appendChild(linha1);
+            
+            const linha2 = document.createElement('div');
+            linha2.className = 'terminal-line';
+            linha2.innerHTML = '<span class="terminal-prompt">usuario@arquivo-luci:/sistema/usuarios$</span> <span class="terminal-command">ls -la</span>';
+            terminalBody.appendChild(linha2);
+            
+            const linha3 = document.createElement('div');
+            linha3.className = 'terminal-line terminal-output';
+            linha3.innerHTML = 'drwxr-xr-x 2 usuario usuario 4096 Jan 15 10:30 .<br>drwxr-xr-x 5 usuario usuario 4096 Jan 15 10:30 ..<br>drwxr-xr-x 2 usuario usuario 4096 Jan 15 10:30 luci';
+            terminalBody.appendChild(linha3);
+            
+            const linha4 = document.createElement('div');
+            linha4.className = 'terminal-line';
+            linha4.innerHTML = '<span class="terminal-prompt">usuario@arquivo-luci:/sistema/usuarios$</span> <span class="terminal-command">cd luci</span>';
+            terminalBody.appendChild(linha4);
+            
+            const linha5 = document.createElement('div');
+            linha5.className = 'terminal-line';
+            linha5.innerHTML = '<span class="terminal-prompt">usuario@arquivo-luci:/sistema/usuarios/luci$</span> <span class="terminal-command">cat memoria_ram.txt</span>';
+            terminalBody.appendChild(linha5);
+            
+            // Adicionar memórias
+            memorias.forEach(memoria => {
+                const memoriaDiv = document.createElement('div');
+                memoriaDiv.className = 'memoria-entrada terminal-output';
+                memoriaDiv.textContent = memoria;
+                terminalBody.appendChild(memoriaDiv);
+            });
+            
+            // Adicionar cursor piscante
+            const cursor = document.createElement('div');
+            cursor.className = 'terminal-line';
+            cursor.innerHTML = '<span class="terminal-prompt">usuario@arquivo-luci:/sistema/usuarios/luci$</span> <span class="blink">_</span>';
+            terminalBody.appendChild(cursor);
+            
+            // Rolagem para baixo
+            terminalBody.scrollTop = terminalBody.scrollHeight;
+        }
+
+        // Interações com Capivara
+        const capivaraBtn = document.getElementById('capivaraBtn');
+        const capivaraAvatar = document.getElementById('capivaraAvatar');
+        const capivaraBalao = document.getElementById('capivaraBalao');
+        const capivaraMensagem = document.getElementById('capivaraMensagem');
+        
+        function mostrarMensagemCapivara() {
+            // Seleciona uma mensagem aleatória
+            const mensagemAleatoria = mensagensCapivara[Math.floor(Math.random() * mensagensCapivara.length)];
+            capivaraMensagem.textContent = mensagemAleatoria;
+            
+            // Mostra o balão
+            capivaraBalao.classList.add('mostrar');
+            
+            // Esconde o balão após 5 segundos
+            setTimeout(() => {
+                capivaraBalao.classList.remove('mostrar');
+            }, 5000);
+        }
+        
+        capivaraBtn.addEventListener('click', mostrarMensagemCapivara);
+        capivaraAvatar.addEventListener('click', mostrarMensagemCapivara);
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            // Carrega os dados iniciais
+            carregarFilmes();
+            carregarPoesias();
+            carregarCuriosidades();
+            carregarTerminal();
+            
+            // Inicia com a página inicial
+            mostrarPagina('inicio');
+        });
+    </script>
+</body>
+</html>
