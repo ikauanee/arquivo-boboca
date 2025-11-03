@@ -916,6 +916,22 @@ abro um pouco cada um
 e deixo que o aroma
 inunde meus pensamentos.`,
                 nota: "Às vezes uma poesia minha no meio — pra dar aquele murro sensível."
+            },
+            {
+                titulo: "No Meio do Caminho",
+                autor: "Carlos Drummond de Andrade",
+                conteudo: `No meio do caminho tinha uma pedra
+tinha uma pedra no meio do caminho
+tinha uma pedra
+no meio do caminho tinha uma pedra.
+
+Nunca me esquecerei desse acontecimento
+na vida de minhas retinas tão fatigadas.
+Nunca me esquecerei que no meio do caminho
+tinha uma pedra
+tinha uma pedra no meio do caminho
+no meio do caminho tinha uma pedra.`,
+                nota: "Essa aqui é pra você pensar que entendeu algo profundo."
             }
         ];
 
@@ -934,16 +950,6 @@ inunde meus pensamentos.`,
                 titulo: "Por que bocejamos?",
                 conteudo: "A ciência ainda debate isso, mas as teorias mais aceitas são: 1) Para oxigenar o cérebro quando estamos cansados ou entediados; 2) Como um mecanismo social de comunicação - bocejos são contagiosos!; 3) Para regular a temperatura cerebral.",
                 categoria: "Biologia"
-            },
-            {
-                titulo: "Qual é a origem do chocolate?",
-                conteudo: "O chocolate vem dos grãos de cacau, que eram tão valiosos para os astecas que eram usados como moeda! Os astecas preparavam uma bebida amarga chamada 'xocoatl', que significa 'água amarga'. Só quando chegou à Europa que adicionaram açúcar e leite.",
-                categoria: "História/Gastronomia"
-            },
-            {
-                titulo: "Por que os gatos ronronam?",
-                conteudo: "Os gatos não ronronam apenas quando estão felizes! Eles também ronronam quando estão com dor, assustados ou até mesmo quando estão morrendo. A teoria é que as vibrações do ronronar (entre 25-150 Hz) podem ter propriedades curativas e calmantes.",
-                categoria: "Zoologia"
             }
         ];
 
@@ -975,6 +981,11 @@ inunde meus pensamentos.`,
                 
                 const target = this.getAttribute('data-target');
                 mostrarPagina(target);
+                
+                // Se for a página de poesias, garantir que as poesias sejam carregadas
+                if (target === 'poesias') {
+                    carregarPoesias();
+                }
             });
         });
         
@@ -1096,6 +1107,17 @@ inunde meus pensamentos.`,
             const poesiaContainer = document.getElementById('poesiaContainer');
             poesiaContainer.innerHTML = '';
             
+            if (poesias.length === 0) {
+                const semPoesias = document.createElement('div');
+                semPoesias.className = 'sem-filmes';
+                semPoesias.innerHTML = `
+                    <p>Nenhuma poesia adicionada ainda.</p>
+                    <p>Em breve teremos poesias aqui!</p>
+                `;
+                poesiaContainer.appendChild(semPoesias);
+                return;
+            }
+            
             poesias.forEach(poesia => {
                 const poesiaCard = document.createElement('div');
                 poesiaCard.className = 'poesia-card';
@@ -1206,7 +1228,7 @@ inunde meus pensamentos.`,
         document.addEventListener('DOMContentLoaded', function() {
             // Carrega os dados iniciais
             carregarFilmes();
-            carregarPoesias();
+            carregarPoesias(); // AGORA ESTÁ SENDO CHAMADA!
             carregarCuriosidades();
             carregarTerminal();
             
