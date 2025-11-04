@@ -150,10 +150,17 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 3.5rem;
-            color: var(--preto);
             cursor: pointer;
             transition: transform 0.3s;
+            overflow: hidden;
+            border: 3px solid var(--rosa-medio);
+        }
+        
+        .capivara-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
         }
         
         .capivara-avatar:hover {
@@ -224,8 +231,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 4.5rem;
-            color: white;
+            overflow: hidden;
+            border: 3px solid var(--caramelo-claro);
+        }
+        
+        .caramelo-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
         }
         
         .caramelo-fala {
@@ -283,6 +297,7 @@
             overflow: hidden;
             transition: transform 0.3s, box-shadow 0.3s;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
         }
         
         .filme-card:hover {
@@ -325,6 +340,28 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: 15px;
             color: #ccc;
+        }
+        
+        .btn-excluir {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-excluir:hover {
+            background-color: rgba(255, 0, 0, 0.7);
         }
         
         .sem-filmes {
@@ -592,8 +629,8 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 60px;
-            height: 60px;
+            width: 40px;
+            height: 40px;
             background-color: var(--rosa-suave);
             border-radius: 50%;
             display: flex;
@@ -668,7 +705,11 @@
             .caramelo-avatar {
                 width: 120px;
                 height: 120px;
-                font-size: 3.5rem;
+            }
+            
+            .capivara-avatar {
+                width: 120px;
+                height: 120px;
             }
         }
     </style>
@@ -888,8 +929,21 @@
     </div>
 
     <script>
-        // Dados iniciais - SEM FILMES INICIAIS
-        const filmes = [];
+        // Funções para gerenciar o localStorage
+        function salvarFilmes() {
+            localStorage.setItem('filmesArquivoLuci', JSON.stringify(filmes));
+        }
+
+        function carregarFilmesSalvos() {
+            const filmesSalvos = localStorage.getItem('filmesArquivoLuci');
+            if (filmesSalvos) {
+                return JSON.parse(filmesSalvos);
+            }
+            return [];
+        }
+
+        // Dados iniciais - Carrega do localStorage se existir
+        let filmes = carregarFilmesSalvos();
 
         const poesias = [
             {
@@ -955,7 +1009,7 @@
             "Backup emocional realizado. Dados: seguros."
         ];
 
-        // Navegação entre páginas - CORREÇÃO AQUI
+        // Navegação entre páginas
         document.addEventListener('DOMContentLoaded', function() {
             // Adiciona event listeners para todos os links de navegação
             document.querySelectorAll('.nav-links a, .btn-archivo, .logo').forEach(link => {
@@ -1014,7 +1068,7 @@
                 return;
             }
             
-            filmes.forEach(filme => {
+            filmes.forEach((filme, index) => {
                 const filmeCard = document.createElement('div');
                 filmeCard.className = 'filme-card';
                 
@@ -1028,6 +1082,7 @@
                     `Poster do filme "${filme.titulo}"`;
                 
                 filmeCard.innerHTML = `
+                    <button class="btn-excluir" data-index="${index}" title="Excluir filme">×</button>
                     <div class="filme-poster" ${posterStyle}>
                         ${posterContent}
                     </div>
@@ -1043,6 +1098,23 @@
                 
                 filmesGrid.appendChild(filmeCard);
             });
+
+            // Adicionar event listeners para os botões de excluir
+            document.querySelectorAll('.btn-excluir').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    excluirFilme(index);
+                });
+            });
+        }
+
+        // Excluir filme
+        function excluirFilme(index) {
+            if (confirm('Tem certeza que deseja excluir este filme?')) {
+                filmes.splice(index, 1);
+                salvarFilmes();
+                carregarFilmes();
+            }
         }
 
         // Adicionar novo filme
@@ -1072,10 +1144,12 @@
                     quemIndicou: quemIndicou,
                     avaliacaoEla: avaliacaoEla,
                     avaliacaoEu: avaliacaoEu,
-                    comentario: comentario
+                    comentario: comentario,
+                    dataAdicao: new Date().toLocaleDateString('pt-BR')
                 };
                 
                 filmes.push(novoFilme);
+                salvarFilmes();
                 carregarFilmes();
                 
                 // Limpar formulário
@@ -1239,9 +1313,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
