@@ -670,6 +670,23 @@
                 height: 120px;
                 font-size: 3.5rem;
             }
+.capivara-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #cbb997; /* cor de fundo caso não carregue */
+}
+
+.capivara-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
         }
     </style>
 </head>
@@ -701,7 +718,6 @@
              <img src="capivara.png" alt="Capivara Leo"> </div>
                         <div class="capivara-texto">
                             <p>"Olá! Sou o Léo, a capivara. Vim direto do seu quarto para cumprir a missão que me foi destinada: te guiar por este site. Mas não estou sozinho — trouxe meu irmão para me ajudar."</p>
-                             <img src="capivara.png" alt="Capivara Leo" width="150">
                         </div>
                     </div>
                     
@@ -1240,6 +1256,7 @@
     </script>
 </body>
 </html>
+
 
 
 
