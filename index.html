@@ -97,6 +97,23 @@
             width: 100%;
         }
         
+        /* Menu Mobile */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--rosa-medio);
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+        
         /* Páginas */
         .page {
             min-height: 100vh;
@@ -670,32 +687,98 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* Responsividade */
+        /* ===== RESPONSIVIDADE ===== */
         @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            /* Header Mobile */
             .nav-links {
-                display: none;
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background-color: rgba(26, 26, 26, 0.98);
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding-top: 40px;
+                transition: left 0.3s ease;
+                backdrop-filter: blur(20px);
             }
             
-            .filmes-grid {
-                grid-template-columns: 1fr;
+            .nav-links.active {
+                left: 0;
             }
             
+            .nav-links li {
+                margin: 0 0 30px 0;
+            }
+            
+            .nav-links a {
+                font-size: 1.1rem;
+                padding: 10px 20px;
+            }
+            
+            .menu-toggle {
+                display: flex;
+            }
+            
+            /* Páginas */
             .page {
                 padding-top: 70px;
             }
             
             .page-content {
-                padding: 40px 0 30px;
+                padding: 30px 0 20px;
             }
             
             h1 {
                 font-size: 2rem;
+                margin-bottom: 15px;
             }
             
+            h2 {
+                font-size: 1rem;
+                margin-bottom: 30px;
+                padding: 0 10px;
+            }
+            
+            /* Página Inicial */
+            #inicio .page-content {
+                min-height: calc(100vh - 110px);
+            }
+            
+            .capivara-avatar {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .capivara-texto {
+                padding: 15px;
+                margin: 0 10px;
+            }
+            
+            .texto-intro {
+                margin: 20px auto;
+                font-size: 1rem;
+                padding: 0 15px;
+            }
+            
+            .btn-archivo {
+                padding: 10px 25px;
+                font-size: 0.9rem;
+            }
+            
+            /* Página Caramelo */
             .caramelo-container {
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
+                gap: 20px;
+                padding: 0 15px;
             }
             
             .caramelo-fala::after {
@@ -707,9 +790,169 @@
                 height: 120px;
             }
             
+            .caramelo-fala {
+                padding: 20px;
+            }
+            
+            .minha-fala {
+                padding: 20px;
+                margin: 30px 15px 0;
+            }
+            
+            /* Aba Filmes */
+            .filmes-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                margin-top: 30px;
+            }
+            
+            .filme-poster {
+                height: 300px;
+            }
+            
+            .filme-info {
+                padding: 15px;
+            }
+            
+            .filme-titulo {
+                font-size: 1.2rem;
+            }
+            
+            .add-filme-form {
+                padding: 20px;
+                margin: 30px 15px 0;
+            }
+            
+            .form-group {
+                margin-bottom: 15px;
+            }
+            
+            /* Aba Poesias */
+            .poesia-container {
+                margin: 30px 15px 0;
+            }
+            
+            .poesia-card {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .poesia-titulo {
+                font-size: 1.2rem;
+            }
+            
+            /* Aba Curiosidades */
+            .curiosidades-container {
+                margin: 30px 15px 0;
+            }
+            
+            .curiosidade-card {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .curiosidade-titulo {
+                font-size: 1.2rem;
+            }
+            
+            /* Aba Memória RAM */
+            .terminal {
+                margin: 30px 15px 0;
+            }
+            
+            .terminal-body {
+                padding: 20px;
+                min-height: 300px;
+                max-height: 400px;
+            }
+            
+            .terminal-line {
+                font-size: 0.9rem;
+            }
+            
+            /* Aba Sobre Mim */
+            .sobre-container {
+                margin: 30px 15px 0;
+            }
+            
+            .sobre-texto {
+                padding: 20px;
+            }
+            
+            .sobre-texto p {
+                font-size: 1rem;
+            }
+            
+            /* Capivara Mobile */
+            .capivara-flutuante {
+                width: 35px;
+                height: 35px;
+                bottom: 15px;
+                right: 15px;
+            }
+            
+            .capivara-balao {
+                bottom: 70px;
+                right: 15px;
+                max-width: 200px;
+                padding: 12px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .logo {
+                font-size: 1.3rem;
+            }
+            
             .capivara-avatar {
-                width: 120px;
-                height: 120px;
+                width: 100px;
+                height: 100px;
+            }
+            
+            .caramelo-avatar {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .filme-poster {
+                height: 250px;
+            }
+            
+            .btn-archivo, .btn-submit {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .texto-intro, .minha-fala, .add-filme-form {
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            .page {
+                padding-top: 60px;
+            }
+            
+            .capivara-avatar, .caramelo-avatar {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .filme-poster {
+                height: 200px;
             }
         }
     </style>
@@ -719,14 +962,19 @@
         <div class="container">
             <nav>
                 <div class="logo" data-target="inicio">Arquivo da Luci</div>
-                <ul class="nav-links">
+                <div class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <ul class="nav-links" id="navLinks">
                     <li><a href="#" data-target="inicio">Início</a></li>
                     <li><a href="#" data-target="caramelo">Arquivo Luci</a></li>
-                    <li><a href="#" data-target="filmes">Cinemateca Acidental</a></li>
+                    <li><a href="#" data-target="filmes">Cinemateca</a></li>
                     <li><a href="#" data-target="poesias">Pílulas Culturais</a></li>
                     <li><a href="#" data-target="curiosidades">Curiosidades</a></li>
                     <li><a href="#" data-target="memoria">Memória RAM</a></li>
-                    <li><a href="#" data-target="sobre">Quem programou isso?</a></li>
+                    <li><a href="#" data-target="sobre">Quem fez?</a></li>
                 </ul>
             </nav>
         </div>
@@ -1009,6 +1257,35 @@
             "Backup emocional realizado. Dados: seguros."
         ];
 
+        // Menu Mobile
+        function configurarMenuMobile() {
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (menuToggle && navLinks) {
+                menuToggle.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                    // Animação do hamburger
+                    const spans = menuToggle.querySelectorAll('span');
+                    spans[0].style.transform = navLinks.classList.contains('active') ? 'rotate(45deg) translate(5px, 5px)' : 'none';
+                    spans[1].style.opacity = navLinks.classList.contains('active') ? '0' : '1';
+                    spans[2].style.transform = navLinks.classList.contains('active') ? 'rotate(-45deg) translate(7px, -6px)' : 'none';
+                });
+                
+                // Fechar menu ao clicar em um link
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.addEventListener('click', function() {
+                        navLinks.classList.remove('active');
+                        // Resetar animação do hamburger
+                        const spans = menuToggle.querySelectorAll('span');
+                        spans[0].style.transform = 'none';
+                        spans[1].style.opacity = '1';
+                        spans[2].style.transform = 'none';
+                    });
+                });
+            }
+        }
+
         // Navegação entre páginas
         document.addEventListener('DOMContentLoaded', function() {
             // Adiciona event listeners para todos os links de navegação
@@ -1022,6 +1299,9 @@
                     }
                 });
             });
+            
+            // Configurar menu mobile
+            configurarMenuMobile();
             
             // Inicializa o site
             inicializarSite();
